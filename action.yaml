@@ -1,3 +1,4 @@
+---
 name: 'Yamllint'
 description: 'A linter for YAML files.'
 author: 'ixxeL'
@@ -13,7 +14,7 @@ inputs:
   no-warnings:
     description: 'output only error level problems.'
     required: false
-    default: 'false'  
+    default: 'false'
   exit-zero:
     description: 'Force exit 0 code'
     required: false
