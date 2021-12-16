@@ -48,7 +48,6 @@ runs:
           STRICT=""
         fi
 
-        echo -e "${CYAN}[ INFO ] > Using HUMAN/CI format.${BLANK}"
         yamllint --format=${{ inputs.format }} \
                  ${WARN} \
                  ${STRICT} \
