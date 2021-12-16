@@ -1,0 +1,45 @@
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: nginx-blue-green
+spec:
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app: nginx-blue-green
+  replicas: 3 # tells deployment to run 1 pods matching the template
+  template: # create pods using pod definition in this template
+    metadata:
+      labels:
+        app: nginx-blue-green
+    spec:
+      containers:
+      - name: nginx-blue-green
+        #image: nginx:1.20.2
+        image: nginx:1.21.4
+        imagePullPolicy: IfNotPresent
+        securityContext:
+          allowPrivilegeEscalation: false
+        envFrom:
+        - configMapRef:
+            name: nginx-config-env
+        - secretRef:
+            name: nginx-secret-env
+        ports:
+        - containerPort: 80
+          name : http
+          protocol: TCP
+        readinessProbe:
+          httpGet:
+            path: /index.html
+            port: 80
+            scheme: HTTP
+          initialDelaySeconds: 0
+          periodSeconds: 5
+          timeoutSeconds: 3
+          successThreshold: 3
+          failureThreshold: 3
