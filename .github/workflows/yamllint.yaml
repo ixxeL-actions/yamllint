@@ -24,4 +24,4 @@ jobs:
         config-file: ''
         fix: 'true'
         exit-zero: 'true'
-        working-dir: '.'
+        working-dir: './*.yaml'
