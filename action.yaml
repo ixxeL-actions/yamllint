@@ -79,7 +79,7 @@ runs:
 
         if [[ "${{ inputs.fix }}" = "true" ]]
         then
-          echo -e "${CYAN}[ INFO ] > Yamllint version.${BLANK}"
+          echo -e "${CYAN}[ INFO ] > Yamlfix version.${BLANK}"
           yamlfix --version
           echo -e "${YELLOW}[ EXECUTING ] > Executing YAML fixing with Yamlfix.${BLANK}"
           yamlfix --verbose ${{ inputs.working-dir }}
