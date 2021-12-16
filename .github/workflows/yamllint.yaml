@@ -21,5 +21,7 @@ jobs:
         format: 'colored'
         strict: 'false'
         no-warnings: 'false'
+        config-file: ''
+        fix: 'true'
         exit-zero: 'true'
         working-dir: '.'

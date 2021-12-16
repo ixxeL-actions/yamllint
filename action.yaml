@@ -15,6 +15,14 @@ inputs:
     description: 'output only error level problems.'
     required: false
     default: 'false'
+  config-file:
+    description: 'path to a custom configuration.'
+    required: false
+    default: ''
+  fix:
+    description: 'will use yamlfix to fix YAML file errors.'
+    required: false
+    default: 'false'
   exit-zero:
     description: 'Force exit 0 code'
     required: false
@@ -22,7 +30,7 @@ inputs:
   working-dir:
     description: 'file to scan'
     required: false
-    default: '.'
+    default: './*.yaml'
 
 runs:
   using: "composite"
@@ -49,11 +57,16 @@ runs:
           STRICT=""
         fi
 
+        if [[ -n "${{ inputs.config-file }}" ]]
+        then
+          CONFIG="--config-file=${{ inputs.config-file }}"
+        fi
+
         yamllint --format=${{ inputs.format }} \
                  ${WARN} \
                  ${STRICT} \
+                 ${CONFIG} \
                  ${{ inputs.working-dir }}
-
 
         EXIT_CODE="${PIPESTATUS[0]}"
         if [[ ${EXIT_CODE} -ne 0 && ${{ inputs.exit-zero }} != true ]]
@@ -62,6 +75,21 @@ runs:
           exit ${EXIT_CODE}
         else
           echo -e "${GREEN}[ SUCCESS ] > Yamllint scan succeeded.${BLANK}"
+        fi
+
+        if [[ "${{ inputs.fix }}" = "true" ]]
+        then
+          echo -e "${CYAN}[ INFO ] > Yamllint version.${BLANK}"
+          yamlfix --version
+          echo -e "${YELLOW}[ EXECUTING ] > Executing YAML fixing with Yamlfix.${BLANK}"
+          yamlfix --verbose ${{ inputs.working-dir }}
+        fi
+        if [[ $? = 0 ]]
+        then
+          echo -e "${GREEN}[ SUCCESS ] > Yamlfix fixing succeeded.${BLANK}"
+        else
+          echo -e "${RED}[ FAIL ] > Yamlfix fixing failed.${BLANK}"
+          exit 1
         fi
       shell: bash
       env:
