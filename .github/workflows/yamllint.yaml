@@ -3,14 +3,14 @@ name: Yamllint-CI
 on:
   push:
     branches:
-      - main
+    - main
   pull_request:
     branches:
-      - main
+    - main
 jobs:
   test:
     runs-on: ubuntu-latest
-    container: 
+    container:
       image: ixxel/unit-tests-alpine:latest
     steps:
     - name: Git clone repo
@@ -18,10 +18,10 @@ jobs:
     - name: Yamllint scan
       uses: ixxeL-actions/yamllint@main
       with:
-        format: 'colored'
+        format: colored
         strict: 'false'
         no-warnings: 'false'
         config-file: ''
         fix: 'true'
         exit-zero: 'true'
-        working-dir: './*.yaml'
+        working-dir: ./*.yaml
